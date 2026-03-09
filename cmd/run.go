@@ -3,9 +3,11 @@ package cmd
 import (
 	"fmt"
 
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 	"github.com/unoharu/hikyaku/internal/edo"
 	"github.com/unoharu/hikyaku/internal/fileops"
+	"github.com/unoharu/hikyaku/internal/ui"
 )
 
 var runCmd = &cobra.Command{
@@ -16,13 +18,19 @@ var runCmd = &cobra.Command{
 		src := args[0]
 		dst := args[1]
 		fmt.Printf("走るぜ！[%s] から [%s] へ届けてみせる！\n", src, dst)
-		
+
+		// ファイルコピーを先に実行
 		if err := fileops.Copy(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
-			return err			
+			return err
 		}
-	
-		fmt.Println("ガッテンだ！無事に荷を届けたぜ。受け取りの判をもらってきな！")
+
+		// プログレスバーを表示（疑似進捗）
+		p := tea.NewProgram(ui.NewModel())
+		if _, err := p.Run(); err != nil {
+			return err
+		}
+
 		return nil
 	},
 }
