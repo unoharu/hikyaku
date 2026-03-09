@@ -20,7 +20,7 @@ var todokeCmd = &cobra.Command{
 
 		info, err := os.Stat(src)
 		if err != nil {
-				return err
+			return err
 		}
 		fmt.Println(edo.FormatSize(info.Size()))
 		fmt.Println(edo.WeightComment(info.Size()))

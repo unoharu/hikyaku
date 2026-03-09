@@ -26,11 +26,11 @@ func FormatSize(bytes int64) string {
 
 func WeightComment(bytes int64) string {
 	switch {
-	case bytes < MB:        // 〜1MB
+	case bytes < MB: // 〜1MB
 		return "これくらい羽より軽いぜ"
-	case bytes < 100*MB:    // 1MB〜100MB
+	case bytes < 100*MB: // 1MB〜100MB
 		return "ちょうどいい荷だ"
-	case bytes < GB:        // 100MB〜1GB
+	case bytes < GB: // 100MB〜1GB
 		return "うっ…重い。これは米俵か？"
 	default:
 		return "こいつは…無理言うなよ旦那…"
