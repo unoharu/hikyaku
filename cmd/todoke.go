@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/unoharu/hikyaku/internal/edo"
 	"github.com/unoharu/hikyaku/internal/fileops"
 )
 
@@ -17,6 +18,7 @@ var todokeCmd = &cobra.Command{
 		fmt.Printf("届けるぜ！[%s] から [%s] へ、跡形もなく運んでやる！\n", src, dst)
 		
 		if err := fileops.Move(src, dst); err != nil {
+			fmt.Println(edo.ErrorMessage(err))
 			return err			
 		}
 	

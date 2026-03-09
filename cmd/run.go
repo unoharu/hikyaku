@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/unoharu/hikyaku/internal/edo"
 	"github.com/unoharu/hikyaku/internal/fileops"
 )
 
@@ -15,8 +16,9 @@ var runCmd = &cobra.Command{
 		src := args[0]
 		dst := args[1]
 		fmt.Printf("走るぜ！[%s] から [%s] へ届けてみせる！\n", src, dst)
-
+		
 		if err := fileops.Copy(src, dst); err != nil {
+			fmt.Println(edo.ErrorMessage(err))
 			return err			
 		}
 	
