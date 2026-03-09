@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+const EmptyFileMessage = "おい旦那、この荷物…空っぽじゃねぇか。からかってんのか？"
+
 func ErrorMessage(err error) string {
 	if errors.Is(err, os.ErrNotExist) {
 		return "てやんでぇ！存在しねぇ荷物を運べってのか？化かされてんじゃねぇよ！"

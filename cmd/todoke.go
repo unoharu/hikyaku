@@ -29,6 +29,11 @@ var todokeCmd = &cobra.Command{
 			return err
 		}
 
+		if info.Size() == 0 {
+			fmt.Println(edo.EmptyFileMessage)
+			return nil
+		}
+
 		if !todokeYonige {
 			fmt.Println(edo.FormatSize(info.Size()))
 			fmt.Println(edo.WeightComment(info.Size()))
