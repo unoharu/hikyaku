@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
@@ -19,7 +20,13 @@ var runCmd = &cobra.Command{
 		dst := args[1]
 		fmt.Printf("走るぜ！[%s] から [%s] へ届けてみせる！\n", src, dst)
 
-		// ファイルコピーを先に実行
+		info, err := os.Stat(src)
+		if err != nil {
+				return err
+		}
+		fmt.Println(edo.FormatSize(info.Size()))
+		fmt.Println(edo.WeightComment(info.Size()))
+
 		if err := fileops.Copy(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err

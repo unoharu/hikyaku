@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/unoharu/hikyaku/internal/edo"
@@ -16,6 +17,13 @@ var todokeCmd = &cobra.Command{
 		src := args[0]
 		dst := args[1]
 		fmt.Printf("届けるぜ！[%s] から [%s] へ、跡形もなく運んでやる！\n", src, dst)
+
+		info, err := os.Stat(src)
+		if err != nil {
+				return err
+		}
+		fmt.Println(edo.FormatSize(info.Size()))
+		fmt.Println(edo.WeightComment(info.Size()))
 
 		if err := fileops.Move(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
