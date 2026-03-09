@@ -66,11 +66,17 @@ var runCmd = &cobra.Command{
 			return err
 		}
 
+		fortune, err := edo.FortuneFromFile(dst)
+		if err != nil {
+			fortune = ""
+		}
+
 		if err := store.Append(store.Entry{
-			Time:  time.Now(),
-			Src:   src,
-			Dst:   dst,
-			Bytes: info.Size(),
+			Time:    time.Now(),
+			Src:     src,
+			Dst:     dst,
+			Bytes:   info.Size(),
+			Fortune: fortune,
 		}); err != nil {
 			fmt.Printf("台帳への記録に失敗したぜ: %v\n", err)
 		}
@@ -79,6 +85,9 @@ var runCmd = &cobra.Command{
 			p := tea.NewProgram(ui.NewModel(src, dst))
 			if _, err := p.Run(); err != nil {
 				return err
+			}
+			if fortune != "" {
+				fmt.Printf("おみくじ：【%s】%s\n", fortune, edo.FortuneMessage(fortune))
 			}
 		}
 
