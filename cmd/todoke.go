@@ -59,6 +59,8 @@ var todokeCmd = &cobra.Command{
 			}
 		}
 
+		edo.MaybeBandit(todokeYonige)
+
 		if err := fileops.Move(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err

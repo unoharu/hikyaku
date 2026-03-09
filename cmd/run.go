@@ -61,6 +61,8 @@ var runCmd = &cobra.Command{
 			}
 		}
 
+		edo.MaybeBandit(runYonige)
+
 		if err := fileops.Copy(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err
