@@ -12,21 +12,23 @@ type Model struct {
 	progress progress.Model
 	percent  float64
 	done     bool
+	src      string
+	dst      string
 }
 
 type ProgressMsg float64
 type DoneMsg struct{}
 
-// tickMsg は一定間隔で進捗を進めるタイマーイベント
 type tickMsg time.Time
 
-func NewModel() Model {
+func NewModel(src, dst string) Model {
 	return Model{
 		progress: progress.New(progress.WithDefaultGradient()),
+		src:      src,
+		dst:      dst,
 	}
 }
 
-// tick は0.1秒後に tickMsg を送るコマンド
 func tick() tea.Cmd {
 	return tea.Tick(100*time.Millisecond, func(t time.Time) tea.Msg {
 		return tickMsg(t)
@@ -56,8 +58,28 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
+	station := CurrentStation(m.percent)
+
 	if m.done {
-		return "ガッテンだ！無事に荷を届けたぜ。\n"
+		end := EndStation()
+		return fmt.Sprintf(
+			"\n出発地点：[%s] ── 到着地点：[%s]\n宿場町[%s] 「%s」\n\n",
+			m.src, m.dst,
+			end.Name, end.Quote,
+		)
 	}
-	return fmt.Sprintf("\n🏃💨 走るぜ！\n%s\n", m.progress.ViewAs(m.percent))
+
+	start := StartStation()
+	end := EndStation()
+	bar := m.progress.ViewAs(m.percent)
+
+	return fmt.Sprintf(
+		"\n出発地点：[%s] ── 到着地点：[%s]\n宿場町[%s]%s宿場町[%s]\n🏃💨 %s\n「%s」\n",
+		m.src, m.dst,
+		start.Name,
+		"　　　　　　　　　　　　　　　　　　　　",
+		end.Name,
+		bar,
+		station.Quote,
+	)
 }

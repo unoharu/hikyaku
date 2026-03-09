@@ -65,7 +65,7 @@ var runCmd = &cobra.Command{
 		}
 
 		if !runYonige {
-			p := tea.NewProgram(ui.NewModel())
+			p := tea.NewProgram(ui.NewModel(src, dst))
 			if _, err := p.Run(); err != nil {
 				return err
 			}
