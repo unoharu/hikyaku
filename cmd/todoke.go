@@ -16,12 +16,12 @@ var todokeCmd = &cobra.Command{
 		src := args[0]
 		dst := args[1]
 		fmt.Printf("届けるぜ！[%s] から [%s] へ、跡形もなく運んでやる！\n", src, dst)
-		
+
 		if err := fileops.Move(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
-			return err			
+			return err
 		}
-	
+
 		fmt.Println("ガッテンだ！無事に荷を届けたぜ。受け取りの判をもらってきな！")
 		return nil
 	},
