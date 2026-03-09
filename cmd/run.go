@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/unoharu/hikyaku/internal/fileops"
 )
 
 var runCmd = &cobra.Command{
@@ -14,6 +15,12 @@ var runCmd = &cobra.Command{
 		src := args[0]
 		dst := args[1]
 		fmt.Printf("走るぜ！[%s] から [%s] へ届けてみせる！\n", src, dst)
+
+		if err := fileops.Copy(src, dst); err != nil {
+			return err			
+		}
+	
+		fmt.Println("ガッテンだ！無事に荷を届けたぜ。受け取りの判をもらってきな！")
 		return nil
 	},
 }
