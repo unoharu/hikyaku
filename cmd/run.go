@@ -27,6 +27,9 @@ var runCmd = &cobra.Command{
 		fmt.Println(edo.FormatSize(info.Size()))
 		fmt.Println(edo.WeightComment(info.Size()))
 
+		w := edo.RandomWeather()
+		fmt.Printf("%s 「%s」\n", w.Label, w.Line)
+
 		if err := fileops.Copy(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err
