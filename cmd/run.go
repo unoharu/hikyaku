@@ -3,11 +3,13 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 	"github.com/unoharu/hikyaku/internal/edo"
 	"github.com/unoharu/hikyaku/internal/fileops"
+	"github.com/unoharu/hikyaku/internal/store"
 	"github.com/unoharu/hikyaku/internal/ui"
 )
 
@@ -62,6 +64,15 @@ var runCmd = &cobra.Command{
 		if err := fileops.Copy(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err
+		}
+
+		if err := store.Append(store.Entry{
+			Time:  time.Now(),
+			Src:   src,
+			Dst:   dst,
+			Bytes: info.Size(),
+		}); err != nil {
+			fmt.Printf("台帳への記録に失敗したぜ: %v\n", err)
 		}
 
 		if !runYonige {
