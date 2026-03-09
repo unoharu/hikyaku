@@ -11,6 +11,8 @@ import (
 	"github.com/unoharu/hikyaku/internal/ui"
 )
 
+var runKakugo bool
+
 var runCmd = &cobra.Command{
 	Use:   "run [src] [dst]",
 	Short: "荷運び(コピー): 飛脚が走りながらファイルをコピーする",
@@ -30,6 +32,20 @@ var runCmd = &cobra.Command{
 		w := edo.RandomWeather()
 		fmt.Printf("%s 「%s」\n", w.Label, w.Line)
 
+		if _, err := os.Stat(dst); err == nil {
+			if runKakugo {
+				fmt.Println("上書きしたぞ。後悔すんなよ。")
+			} else {
+				fmt.Print("おっと、そこには先客がいるようだ。蹴散らして（上書き）も構わねぇかい？ [y/n]: ")
+				var answer string
+				fmt.Scanln(&answer)
+				if answer != "y" && answer != "Y" {
+					fmt.Println("そうかい、引き返すなら今のうちだぜ。")
+					return nil
+				}
+			}
+		}
+
 		if err := fileops.Copy(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err
@@ -47,4 +63,5 @@ var runCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(runCmd)
+	runCmd.Flags().BoolVarP(&runKakugo, "kakugo", "k", false, "上書き確認をスキップする（覚悟の上で）")
 }

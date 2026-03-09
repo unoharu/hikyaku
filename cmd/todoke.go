@@ -9,6 +9,8 @@ import (
 	"github.com/unoharu/hikyaku/internal/fileops"
 )
 
+var todokeKakugo bool
+
 var todokeCmd = &cobra.Command{
 	Use:   "todoke [src] [dst]",
 	Short: "届け（移動）: ファイルを移動し、元場所を空き地にする",
@@ -28,6 +30,20 @@ var todokeCmd = &cobra.Command{
 		w := edo.RandomWeather()
 		fmt.Printf("%s 「%s」\n", w.Label, w.Line)
 
+		if _, err := os.Stat(dst); err == nil {
+			if todokeKakugo {
+				fmt.Println("上書きしたぞ。後悔すんなよ。")
+			} else {
+				fmt.Print("おっと、そこには先客がいるようだ。蹴散らして（上書き）も構わねぇかい？ [y/n]: ")
+				var answer string
+				fmt.Scanln(&answer)
+				if answer != "y" && answer != "Y" {
+					fmt.Println("そうかい、引き返すなら今のうちだぜ。")
+					return nil
+				}
+			}
+		}
+
 		if err := fileops.Move(src, dst); err != nil {
 			fmt.Println(edo.ErrorMessage(err))
 			return err
@@ -40,4 +56,5 @@ var todokeCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(todokeCmd)
+	todokeCmd.Flags().BoolVarP(&todokeKakugo, "kakugo", "k", false, "上書き確認をスキップする（覚悟の上で）")
 }
