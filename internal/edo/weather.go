@@ -13,7 +13,6 @@ var weathers = []Weather{
 	{"⛈️ 嵐", "台風だー！荷が濡れちまう！"},
 }
 
-// RandomWeather returns a random weather message for the current run.
 func RandomWeather() Weather {
 	return weathers[rand.Intn(len(weathers))]
 }
